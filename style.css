@@ -91,7 +91,7 @@ html {
     height: 100vh;
     margin: auto;
 }
-
+/* heading */
 .heading {
     position: relative;
     display: flex;
@@ -129,4 +129,25 @@ h1 {
   font-weight: 700;
   color:  rgb(96, 128, 61);
 }
+/* heading */
+/* controls */
+.controls {
+  display: flex;
+  justify-content: space-between;
+}
+.controls-display {
+  display: flex;
+}
+.display-buttons {
+  height: fit-content;
+  width: fit-content;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.display-buttons-active {
+background-color: green;
+}
+/* controls */
 
