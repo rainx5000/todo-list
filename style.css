@@ -172,3 +172,19 @@ background-color: green;
 }
 /* controls */
 
+.task {
+  background-color: var(--bg-color);
+  display: flex;
+  justify-content: flex-end;
+  margin: 2vh 2vw 0 2vw;
+}
+
+.task input {
+  margin-left: 2vw;
+  margin-right: auto;
+  flex-grow: 1;
+  outline: none;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+}
+

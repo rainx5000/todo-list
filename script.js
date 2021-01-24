@@ -16,6 +16,7 @@ document.body.addEventListener('click', (e) => console.dir(e.target))
 const addBtn = document.querySelector('.add');
 const addForm = document.querySelector('.add-form');
 const addFormInput = document.querySelector('.add-form-input')
+const listContainer = document.querySelector('.list')
 
 mylist = [] //my storage for tasks
 //OPEN AND CLOSE FORM
@@ -23,22 +24,40 @@ addBtn.addEventListener('click', (e) => {
     addForm.classList.toggle('display-off')
     
 })
-addForm.addEventListener('click', (e) => {
+addForm.addEventListener('mousedown', (e) => {
     if (e.target.classList.contains('add-form')) {
         addForm.classList.toggle('display-off')
     }
 })
 //OPEN AND CLOSE FORM
-
+//submits our new task into our task storage array
 addFormInput.addEventListener('keydown', (e) => {
     switch (e.code) {
         case 'Enter':
-            console.log(e.target.value)
-            addForm.classList.toggle('display-off')
+            const task = listFactory(e.target.value);
+            mylist.push(task);
+            render();
+            addForm.classList.toggle('display-off');
     }
 })
+//---------------------------------------------------------
+function render() {
+    mylist.filter(task => {
+        let match = [];
+        const allTasks = listContainer.children
+        for (let i = 0; i < allTasks.length; i++) {
+            if (task.name === allTasks[i].firstElementChild.value) {
+                match.push(task.name)
+            }
+        }
+        if (match.length === 0) {
+            newTask(task.name);
+        } 
+    })
+}
 
-const listFactory = (name) => {
+
+const listFactory = (name) => { //new task object creator
     name = name;
     description = '';
     dueDate =  '';
@@ -46,4 +65,21 @@ const listFactory = (name) => {
     return {name, description, dueDate, priority}
 }
 
-const test = listFactory('tommy')
+
+function newTask(name) {
+    const taskContainer = document.createElement('div');
+    const taskName = document.createElement('input');
+    taskName.value = name;
+    const completeBtn = document.createElement('button');
+    completeBtn.innerHTML = '&#9745'
+    const editBtn = document.createElement('button');
+    editBtn.innerHTML = 'Edit'
+
+
+    listContainer.append(taskContainer)
+    taskContainer.append(taskName, completeBtn, editBtn)
+    taskContainer.classList.add('task')
+    completeBtn.classList.add('complete-button')
+
+}
+
