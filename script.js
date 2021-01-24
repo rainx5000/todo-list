@@ -29,30 +29,43 @@ addForm.addEventListener('mousedown', (e) => {
         addForm.classList.toggle('display-off')
     }
 })
-//OPEN AND CLOSE FORM
+//-------------------------------------------------------------------
 //submits our new task into our task storage array
 addFormInput.addEventListener('keydown', (e) => {
     switch (e.code) {
         case 'Enter':
             const task = listFactory(e.target.value);
             mylist.push(task);
-            render();
+            // newTask(task.name);
+            render()
             addForm.classList.toggle('display-off');
     }
 })
-//---------------------------------------------------------
+//-----------------------------------------------------------------
+
+
 function render() {
-    mylist.filter(task => {
-        let match = [];
-        const allTasks = listContainer.children
-        for (let i = 0; i < allTasks.length; i++) {
-            if (task.name === allTasks[i].firstElementChild.value) {
-                match.push(task.name)
+    while (listContainer.firstChild) {
+        listContainer.removeChild(listContainer.firstChild)
+    }
+    
+    for (let task of mylist) {
+        newTask(task.name)
+        console.log('wrong')
+
+    }
+    const allCompleteBtns = document.querySelectorAll('.complete-button') //each task complete btn will remove selected dom element object in mylist, then renders it again
+    allCompleteBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            for (let i = 0; i < mylist.length; i++) {
+                if (mylist[i].name === e.target.parentElement.firstChild.value) {
+                    mylist.splice(i, 1)
+                    render();
+                    console.log(mylist)
+                }
             }
-        }
-        if (match.length === 0) {
-            newTask(task.name);
-        } 
+            
+        })
     })
 }
 
