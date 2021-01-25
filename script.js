@@ -37,23 +37,23 @@ addFormInput.addEventListener('keydown', (e) => {
             const task = listFactory(e.target.value);
             mylist.push(task);
             // newTask(task.name);
-            render()
+            
             addForm.classList.toggle('display-off');
+            render()
     }
 })
 //-----------------------------------------------------------------
 
 
 function render() {
-    while (listContainer.firstChild) {
+    while (listContainer.firstChild) {//removes all tasks
         listContainer.removeChild(listContainer.firstChild)
     }
     
-    for (let task of mylist) {
+    for (let task of mylist) {//puts the tasks back inlcluding the new one added
         newTask(task.name)
-        console.log('wrong')
-
     }
+
     const allCompleteBtns = document.querySelectorAll('.complete-button') //each task complete btn will remove selected dom element object in mylist, then renders it again
     allCompleteBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -61,13 +61,40 @@ function render() {
                 if (mylist[i].name === e.target.parentElement.firstChild.value) {
                     mylist.splice(i, 1)
                     render();
-                    console.log(mylist)
                 }
             }
             
         })
     })
+
+    const editBtns = document.querySelectorAll('.edit-button')
+        editBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            expandedTask(e.target.nextSibling);
+        })
+    }) 
+
 }
+
+function expandedTask(taskName) {
+    taskName.classList.toggle('display-off')
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const listFactory = (name) => { //new task object creator
@@ -87,12 +114,49 @@ function newTask(name) {
     completeBtn.innerHTML = '&#9745'
     const editBtn = document.createElement('button');
     editBtn.innerHTML = 'Edit'
+    const config = document.createElement('div');
+    const configDesc = document.createElement('textarea');
+    configDesc.setAttribute('placeholder', 'Description')
+    const datePriorityContainer = document.createElement('div');
+    const configDate = document.createElement('input');
+    configDate.setAttribute('type', 'date')
+    configDate.setAttribute('id', 'date');
+    const dateLabel = document.createElement('label');
+    dateLabel.textContent = 'Do by: '
+    dateLabel.setAttribute('for', 'date')
+    const priorityLabel = document.createElement('label');
+    priorityLabel.textContent = 'Priority: '
+    priorityLabel.setAttribute('for', 'priority')
+    const configPriority = document.createElement('select');
+    configPriority.setAttribute('id', 'priority')
+    const priorityUrgent = document.createElement('option');
+    priorityUrgent.textContent = 'Urgent'
+    const priorityHigh = document.createElement('option');
+    priorityHigh.textContent = 'High'
+    const priorityMedium = document.createElement('option');
+    priorityMedium.textContent = 'Medium'
+    const priorityLow = document.createElement('option');
+    priorityLow.textContent = 'Low'
+
+
+    
+
+
 
 
     listContainer.append(taskContainer)
-    taskContainer.append(taskName, completeBtn, editBtn)
+    taskContainer.append(taskName, completeBtn, editBtn, config)
     taskContainer.classList.add('task')
+    taskName.classList.add('task-name')
     completeBtn.classList.add('complete-button')
+    editBtn.classList.add('edit-button')
+    config.classList.add('config', 'display-off')
+    config.append(configDesc, datePriorityContainer)
+    datePriorityContainer.append(dateLabel, priorityLabel)
+    datePriorityContainer.classList.add('date-priority-container')
+    dateLabel.append(configDate);
+    priorityLabel.append(configPriority);
+    configPriority.append(priorityLow, priorityMedium, priorityHigh, priorityUrgent)
 
 }
 

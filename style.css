@@ -130,9 +130,7 @@ html {
   height: 100vh;
   text-align: center;
 }
-.display-off {
-  display: none;
-}
+
 .add-form input {
   width: 50%;
   height: 10vh;
@@ -175,16 +173,55 @@ background-color: green;
 .task {
   background-color: var(--bg-color);
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   margin: 2vh 2vw 0 2vw;
+  padding: 2vh 2vw 2vh 2vh;
+  height: fit-content;
 }
 
-.task input {
-  margin-left: 2vw;
-  margin-right: auto;
+.task-name {
+  margin: 0 2vh 0 1vh;
   flex-grow: 1;
   outline: none;
   border: none;
   background-color: rgba(0, 0, 0, 0);
 }
+.task-name:focus {
+  outline-color:  rgb(201, 233, 180);
+  outline-style: solid;
+}
 
+.config {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  width: 60vw;
+  height: 15vh;
+  background-color: var(--bg-color);
+  margin: 2vh 2vw 1vh 1vw;
+}
+
+/* .config > * {
+  flex-grow: 1;
+} */
+
+.date-priority-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.date-priority-container:nth-child(1) {
+  display: inline;
+}
+
+.config textarea {
+  resize: none;
+  flex-grow: 1;
+  margin-right: 3vw;
+}
+
+
+.display-off {
+  display: none;
+}
