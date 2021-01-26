@@ -1,24 +1,12 @@
-//importance levels Urgent(4), High(3), Medium(2), Low(1)
-//importance from highest to lowest
-//important from lowest to highest
-//display: all, urgent, high, medium, low 
-document.body.addEventListener('click', (e) => console.dir(e.target))
+// document.body.addEventListener('click', (e) => console.log(e.target.value))
 
-//When I add a new todo list -- I only write in the name of the task
-//take the name of the new task, and run it through a factory function
-//the factory function gives the new todolist an option to change it's date/priority/disc
-//and other stuff
-
-//the new object will be stored into an array,
-
-//we will use the array to create our list, based on its order (hl - priority levels 
-//can be sorted)
 const addBtn = document.querySelector('.add');
 const addForm = document.querySelector('.add-form');
 const addFormInput = document.querySelector('.add-form-input')
 const listContainer = document.querySelector('.list')
+const controlsDisplay = document.querySelector('.controls-display')
 
-mylist = [] //my storage for tasks
+
 //OPEN AND CLOSE FORM
 addBtn.addEventListener('click', (e) => {
     addForm.classList.toggle('display-off')
@@ -34,14 +22,35 @@ addForm.addEventListener('mousedown', (e) => {
 addFormInput.addEventListener('keydown', (e) => {
     switch (e.code) {
         case 'Enter':
-            const task = listFactory(e.target.value);
-            mylist.push(task);
-            // newTask(task.name);
-            
-            addForm.classList.toggle('display-off');
-            render()
+           newTaskCreation(); 
     }
 })
+//-----------------------------------------------------------------
+let select = 'all';
+let mylist = []; 
+
+let mylistStorage = []; //my storage for tasks
+
+const cases = ['1', '2', '3', '4']
+let num;
+controlsDisplay.addEventListener('click', (e) => {
+    num = e.target.value
+    switch (num) {
+        case num:
+            mylist = [];
+            mylistStorage.filter(task => {if(task.priority == num) mylist.push(task)})
+            select = num;  
+            render();
+
+
+            break;
+        case 'all':
+            select = 'all'
+            render();
+            break;
+    }
+})
+
 //-----------------------------------------------------------------
 
 
@@ -50,9 +59,15 @@ function render() {
         listContainer.removeChild(listContainer.firstChild)
     }
     
+    if (select === 'all') mylist = mylistStorage;
+
     for (let task of mylist) {//puts the tasks back inlcluding the new one added
-        newTask(task.name)
+        newTask(task.name, task.description, task.dueDate, task.priority)
     }
+    const tasks = document.querySelectorAll('.task')
+        tasks.forEach((task, index) => {
+            task.dataset.task = index.toString();
+    });
 
     const allCompleteBtns = document.querySelectorAll('.complete-button') //each task complete btn will remove selected dom element object in mylist, then renders it again
     allCompleteBtns.forEach(btn => {
@@ -63,7 +78,6 @@ function render() {
                     render();
                 }
             }
-            
         })
     })
 
@@ -73,7 +87,46 @@ function render() {
             expandedTask(e.target.nextSibling);
         })
     }) 
-
+    const notes = document.querySelectorAll('.notes')
+    notes.forEach(txt => {
+        txt.addEventListener('input', (e) => {
+            console.log(e.target.value)
+            for (let i = 0; i < mylist.length; i++) {
+                if (mylist[i].name === e.target.parentElement.parentElement.firstChild.value) {
+                    mylist[i].description = e.target.value;
+                }
+            }
+        })
+    }) 
+    const dates = document.querySelectorAll('.dates')
+    dates.forEach(date => {
+        date.addEventListener('input', (e) => {
+            
+            for (let i = 0; i < mylist.length; i++) {
+                if (mylist[i].name === e.target.parentElement.parentElement.parentElement.parentElement.firstChild.value) {
+                    mylist[i].dueDate = e.target.value;
+                }
+            }
+        })
+    }) 
+    const priority = document.querySelectorAll('.priority')
+    priority.forEach(lvl => {
+        lvl.addEventListener('input', (e) => {
+            
+            for (let i = 0; i < mylist.length; i++) {
+                if (mylist[i].name === e.target.parentElement.parentElement.parentElement.parentElement.firstChild.value) {
+                    mylist[i].priority = e.target.value;
+                }
+            }
+            for (let option of lvl.children) {
+                if (option.value === lvl.value) {
+                    option.setAttribute('selected', 'selected')
+                } else {
+                    option.removeAttribute('selected');
+                }
+            }
+        })
+    }) 
 }
 
 function expandedTask(taskName) {
@@ -81,19 +134,21 @@ function expandedTask(taskName) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+function newTaskCreation() {
+    for (let task of mylist) {
+        if (task.name === addFormInput.value) {
+         addFormInput.value = '';
+         addForm.classList.toggle('display-off');
+         return;
+        }
+     }
+     const task = listFactory(addFormInput.value);
+     mylistStorage.push(task);
+     addFormInput.value = ''; //resets the new task input value
+     
+     addForm.classList.toggle('display-off');
+     render()
+}
 
 
 
@@ -106,7 +161,7 @@ const listFactory = (name) => { //new task object creator
 }
 
 
-function newTask(name) {
+function newTask(name, desc, date, priority) {
     const taskContainer = document.createElement('div');
     const taskName = document.createElement('input');
     taskName.value = name;
@@ -117,10 +172,12 @@ function newTask(name) {
     const config = document.createElement('div');
     const configDesc = document.createElement('textarea');
     configDesc.setAttribute('placeholder', 'Description')
+    configDesc.value = desc;
     const datePriorityContainer = document.createElement('div');
     const configDate = document.createElement('input');
     configDate.setAttribute('type', 'date')
     configDate.setAttribute('id', 'date');
+    configDate.value = date;
     const dateLabel = document.createElement('label');
     dateLabel.textContent = 'Do by: '
     dateLabel.setAttribute('for', 'date')
@@ -129,21 +186,24 @@ function newTask(name) {
     priorityLabel.setAttribute('for', 'priority')
     const configPriority = document.createElement('select');
     configPriority.setAttribute('id', 'priority')
+    configPriority.value = priority;
     const priorityUrgent = document.createElement('option');
     priorityUrgent.textContent = 'Urgent'
+    priorityUrgent.value = 4;
     const priorityHigh = document.createElement('option');
     priorityHigh.textContent = 'High'
+    priorityHigh.value = '3';
     const priorityMedium = document.createElement('option');
     priorityMedium.textContent = 'Medium'
+    priorityMedium.value = 2;
     const priorityLow = document.createElement('option');
     priorityLow.textContent = 'Low'
-
-
-    
-
-
-
-
+    priorityLow.value = 1;
+    const priorityList = [priorityUrgent, priorityHigh, priorityMedium, priorityLow]
+    for (let lvl of priorityList) {
+        if(priority == lvl.value) lvl.setAttribute('selected', 'selected')  
+    }
+        
     listContainer.append(taskContainer)
     taskContainer.append(taskName, completeBtn, editBtn, config)
     taskContainer.classList.add('task')
@@ -152,10 +212,13 @@ function newTask(name) {
     editBtn.classList.add('edit-button')
     config.classList.add('config', 'display-off')
     config.append(configDesc, datePriorityContainer)
+    configDesc.classList.add('notes');
     datePriorityContainer.append(dateLabel, priorityLabel)
     datePriorityContainer.classList.add('date-priority-container')
     dateLabel.append(configDate);
+    configDate.classList.add('dates')
     priorityLabel.append(configPriority);
+    configPriority.classList.add('priority')
     configPriority.append(priorityLow, priorityMedium, priorityHigh, priorityUrgent)
 
 }
