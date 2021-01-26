@@ -1,4 +1,4 @@
-// document.body.addEventListener('click', (e) => console.log(e.target.value))
+// document.body.addEventListener('click', (e) => console.dir(e.target))
 
 const addBtn = document.querySelector('.add');
 const addForm = document.querySelector('.add-form');
@@ -55,7 +55,7 @@ controlsDisplay.addEventListener('click', (e) => {
 
 
 function render() {
-    while (listContainer.firstChild) {//removes all tasks
+    while (listContainer.firstChild) {//refreshes the tasks with the updateTaskd storage array
         listContainer.removeChild(listContainer.firstChild)
     }
     
@@ -70,14 +70,12 @@ function render() {
     });
 
     const allCompleteBtns = document.querySelectorAll('.complete-button') //each task complete btn will remove selected dom element object in mylist, then renders it again
-    allCompleteBtns.forEach(btn => {
+    allCompleteBtns.forEach((btn, index) => {
         btn.addEventListener('click', (e) => {
-            for (let i = 0; i < mylist.length; i++) {
-                if (mylist[i].name === e.target.parentElement.firstChild.value) {
-                    mylist.splice(i, 1)
+                if (index == (tasks[index].dataset.task)) {
+                    mylist.splice(index, 1)
                     render();
                 }
-            }
         })
     })
 
@@ -88,45 +86,31 @@ function render() {
         })
     }) 
     const notes = document.querySelectorAll('.notes')
-    notes.forEach(txt => {
-        txt.addEventListener('input', (e) => {
-            console.log(e.target.value)
-            for (let i = 0; i < mylist.length; i++) {
-                if (mylist[i].name === e.target.parentElement.parentElement.firstChild.value) {
-                    mylist[i].description = e.target.value;
-                }
-            }
-        })
+    notes.forEach((txt, index) => {
+        updateTask(txt, index, 'description');
     }) 
     const dates = document.querySelectorAll('.dates')
-    dates.forEach(date => {
-        date.addEventListener('input', (e) => {
-            
-            for (let i = 0; i < mylist.length; i++) {
-                if (mylist[i].name === e.target.parentElement.parentElement.parentElement.parentElement.firstChild.value) {
-                    mylist[i].dueDate = e.target.value;
-                }
-            }
-        })
+    dates.forEach((date, index) => {
+        updateTask(date, index, 'dueDate');
     }) 
     const priority = document.querySelectorAll('.priority')
-    priority.forEach(lvl => {
-        lvl.addEventListener('input', (e) => {
-            
-            for (let i = 0; i < mylist.length; i++) {
-                if (mylist[i].name === e.target.parentElement.parentElement.parentElement.parentElement.firstChild.value) {
-                    mylist[i].priority = e.target.value;
-                }
+    priority.forEach((lvl, index) => {
+        updateTask(lvl, index, 'priority')
+        for (let option of lvl.children) {
+            if (option.value === lvl.value) {
+                option.setAttribute('selected', 'selected')
+            } else {
+                option.removeAttribute('selected');
             }
-            for (let option of lvl.children) {
-                if (option.value === lvl.value) {
-                    option.setAttribute('selected', 'selected')
-                } else {
-                    option.removeAttribute('selected');
-                }
+        }
+    }) 
+    function updateTask(el, index, prop) {
+        el.addEventListener('input', (e) => {
+                if (index == (tasks[index].dataset.task)) {
+                    mylist[index][prop] = e.target.value;  
             }
         })
-    }) 
+    }
 }
 
 function expandedTask(taskName) {
