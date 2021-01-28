@@ -33,6 +33,7 @@ html:focus-within {
 /* Set core body defaults */
 body {
   min-height: 100vh;
+  height: fit-content;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
 }
@@ -88,7 +89,9 @@ html {
     /* background-color: rgb(164, 214, 106); */
     background-color: rgb(201, 233, 180);
     width: 50vw;
-    height: 100vh;
+    min-height: 100vh;
+    padding-bottom: 2vh;
+    height: fit-content;
     margin: auto;
 }
 /* heading */
@@ -235,12 +238,6 @@ background-color: green;
 }
 
 
-/* .edit-button {
-  width: 10%;
-  min-width: 10%;
-  flex: 0 0 auto;
-} */
-
 .config {
   display: flex;
   justify-content: space-between;
@@ -289,7 +286,6 @@ background-color: green;
   .config {
     flex-direction: column;
   }
-
 }
 
 @media (max-width: 1000px) {
@@ -330,7 +326,7 @@ background-color: green;
   h1 {
     font-size: 1.4rem;
   }
-
+}
 
 
 @media (min-height: 1200px) {
@@ -338,10 +334,3 @@ background-color: green;
     width: 70%;
   }
 }
-/* 
-1920x1080
-1366x768
-360x640
-414x896
-375x667
-1536x864 */

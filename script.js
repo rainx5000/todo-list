@@ -24,6 +24,7 @@ addFormInput.addEventListener('keydown', (e) => {
     switch (e.code) {
         case 'Enter':
            newTaskCreation(); 
+           
     }
 })
 //-----------------------------------------------------------------
@@ -246,6 +247,7 @@ function newTaskCreation() {
          }
          const task = listFactory(addFormInput.value);
          mylistStorage.push(task);
+         select = 'all'
          resetInput();
          render();
     }
