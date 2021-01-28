@@ -1,4 +1,4 @@
-document.body.addEventListener('click', (e) => console.log(e.target))
+document.body.addEventListener('click', (e) => console.dir(e.target))
 
 const addBtn = document.querySelector('.add');
 const addForm = document.querySelector('.add-form');
@@ -10,6 +10,7 @@ const controlsDisplay = document.querySelector('.controls-display')
 //OPEN AND CLOSE FORM
 addBtn.addEventListener('click', (e) => {
     addForm.classList.toggle('display-off')
+    addFormInput.focus();
     
 })
 addForm.addEventListener('mousedown', (e) => {
@@ -25,11 +26,12 @@ addFormInput.addEventListener('keydown', (e) => {
            newTaskCreation(); 
     }
 })
+addFormInput.addEventListener('blur', (e) => {console.log(this)})
 //-----------------------------------------------------------------
-let select = 'all';
-let mylist = []; 
 
-let mylistStorage = []; //my storage for tasks
+let mylist = []; 
+let select = 'all';
+const mylistStorage = []; //my storage for tasks
 
 const cases = ['1', '2', '3', '4']
 let num;
@@ -68,8 +70,8 @@ function render() {
         tasks.forEach((task, index) => {
             task.dataset.task = index.toString(); //creates a data-task index that correlates with mylistStorage
 
-            task.firstChild.addEventListener('input', (e) => { //updates task name when editing name
-                mylist[index].name = task.firstChild.value;
+            task.firstChild.firstChild.addEventListener('input', (e) => { //updates task name when editing name
+                mylist[index].name = task.firstChild.firstChild.value;
             })
             // task.lastChild.forEach(el => {
             //     if
@@ -91,8 +93,9 @@ function render() {
         editBtns.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             allConfigs.forEach((config) => {
-                if (e.target.nextSibling == config) {
-                    e.target.nextSibling.classList.toggle('display-off')
+
+                if (e.target.parentElement.parentElement.nextSibling == config) {
+                    e.target.parentElement.parentElement.nextSibling.classList.toggle('display-off')
                 }
                 else {
                     config.classList.add('display-off')
@@ -138,10 +141,11 @@ function newTask(name, desc, date, priority) {
     const taskContainer = document.createElement('div');
     const taskName = document.createElement('input');
     taskName.value = name;
+    const containerNameBtns = document.createElement('div');
     const completeBtn = document.createElement('button');
-    completeBtn.innerHTML = '&#9745'
+    completeBtn.innerHTML = '&#10003;'
     const editBtn = document.createElement('button');
-    editBtn.innerHTML = 'Edit'
+    editBtn.innerHTML = '<i class="fas fa-edit"></i>'
     const config = document.createElement('div');
     const configDesc = document.createElement('textarea');
     configDesc.setAttribute('placeholder', 'Description')
@@ -178,7 +182,9 @@ function newTask(name, desc, date, priority) {
     }
         
     listContainer.append(taskContainer)
-    taskContainer.append(taskName, completeBtn, editBtn, config)
+    taskContainer.append(containerNameBtns, config)
+    containerNameBtns.append(taskName, completeBtn, editBtn)
+    containerNameBtns.classList.add('container-name-and-btns')
     taskContainer.classList.add('task')
     taskName.classList.add('task-name')
     completeBtn.classList.add('complete-button')
@@ -187,6 +193,8 @@ function newTask(name, desc, date, priority) {
     config.append(configDesc, datePriorityContainer)
     configDesc.classList.add('notes');
     datePriorityContainer.append(dateLabel, priorityLabel)
+    dateLabel.classList.add('label-date')
+    priorityLabel.classList.add('label-priority')
     datePriorityContainer.classList.add('date-priority-container')
     dateLabel.append(configDate);
     configDate.classList.add('dates')
@@ -220,7 +228,6 @@ function newTaskCreation() {
         resetInput();
     } else {
         for (let task of mylist) {
-            console.log(addFormInput.value == 0)
             if ((task.name === addFormInput.value) || (addFormInput.value == 0)) {
                 resetInput();
              return;

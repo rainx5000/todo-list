@@ -87,7 +87,7 @@ html {
 .container {
     /* background-color: rgb(164, 214, 106); */
     background-color: rgb(201, 233, 180);
-    width: 60vw;
+    width: 50vw;
     height: 100vh;
     margin: auto;
 }
@@ -100,8 +100,8 @@ html {
 }
 
 .add {
-    width: 5vh;
-    height: 5vh;
+    width: 3rem;
+    height: 3rem;
     line-height: 1;
     padding: 0;
     border: none;
@@ -137,6 +137,7 @@ html {
   font-size: 4rem;
   margin-top: 40vh;
   background-color: rgba(0, 0, 0, 0);
+  border-radius: .5;
   color: white;
   border: none;
   outline: none;
@@ -155,14 +156,24 @@ h1 {
   justify-content: space-between;
 }
 .controls-display {
+  width: 100%;
   display: flex;
+  border-bottom: 2px solid rgb(164 214 106);
 }
 .display-buttons {
+  background-color: inherit;
+  color: rgb(96, 128, 61);
+  font-weight: 700;
+  letter-spacing: .1rem;
+  width: 20%;
   height: fit-content;
-  width: fit-content;
   border: none;
   outline: none;
   cursor: pointer;
+  border-right: 1px solid rgb(164 214 106);
+}
+.controls-display button:last-child {
+  border: none;
 }
 
 .display-buttons-active {
@@ -174,40 +185,77 @@ background-color: green;
   background-color: var(--bg-color);
   display: flex;
   flex-wrap: wrap;
+  flex-basis: 1;
   justify-content: flex-end;
   margin: 2vh 2vw 0 2vw;
   padding: 2vh 2vw 2vh 2vh;
+  border-radius: 10px;
   height: fit-content;
 }
 
+.container-name-and-btns {
+  width: 100%;
+  display: flex;
+}
+
 .task-name {
+  min-width: 0;
   margin: 0 2vh 0 1vh;
-  flex-grow: 1;
+  flex: 1 1 auto;
+  width: 80%;
+  max-width: 80%;
   outline: none;
   border: none;
   background-color: rgba(0, 0, 0, 0);
+  color: rgb(54, 73, 33);
+  font-weight: 600;
 }
 .task-name:focus {
   outline-color:  rgb(201, 233, 180);
   outline-style: solid;
 }
 
+.complete-button, .edit-button {
+  cursor: pointer;
+  width: 3rem;
+  flex: 0 0 auto;
+}
+.complete-button, .edit-button {
+  color: rgb(30, 65, 20);
+  line-height: 0;
+  font-size: 3rem;
+  letter-spacing: 0;
+  background-color: inherit;
+  border: none;
+  outline: none;
+}
+
+.edit-button {
+  font-size: 2.3rem;
+}
+
+
+/* .edit-button {
+  width: 10%;
+  min-width: 10%;
+  flex: 0 0 auto;
+} */
+
 .config {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  width: 60vw;
-  height: 15vh;
+
+  min-width: 0;
+  height: fit-content;
   background-color: var(--bg-color);
   margin: 2vh 2vw 1vh 1vw;
 }
 
-/* .config > * {
-  flex-grow: 1;
-} */
 
 .date-priority-container {
   display: flex;
+  flex: 0 1 auto;
   flex-direction: column;
   justify-content: space-evenly;
 }
@@ -215,13 +263,85 @@ background-color: green;
   display: inline;
 }
 
+
+
+.dates {
+  min-width: 0;
+  flex-grow: 1;
+
+}
+
 .config textarea {
+  min-width: 0;
   resize: none;
   flex-grow: 1;
   margin-right: 3vw;
+  min-height: 15vh;
 }
 
 
 .display-off {
   display: none;
 }
+
+
+@media (max-width: 830px) {
+  .config {
+    flex-direction: column;
+  }
+
+}
+
+@media (max-width: 1000px) {
+  .task-name {
+    max-width: 100%;
+    width: 100%;
+  }
+  .container {
+    width: 70%;
+  }
+  .label-priority, .label-date {
+    margin-top: 1vh;
+  }
+}
+
+@media (max-width: 650px) {
+  .container {
+    width: 100%;
+  }
+}
+
+@media (max-width: 450px) {
+  .display-buttons {
+    font-size: .8rem;
+  }
+  .edit-button {
+    font-size: 2rem;
+  }
+  .add {
+    margin-right: 2vh;
+  }
+}
+
+@media (max-width: 320px) {
+  .display-buttons {
+    font-size: .65rem;
+  }
+  h1 {
+    font-size: 1.4rem;
+  }
+
+
+
+@media (min-height: 1200px) {
+  .container {
+    width: 70%;
+  }
+}
+/* 
+1920x1080
+1366x768
+360x640
+414x896
+375x667
+1536x864 */
