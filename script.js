@@ -1,4 +1,4 @@
-document.body.addEventListener('click', (e) => console.dir(e.target))
+// document.body.addEventListener('click', (e) => console.dir(e.target))
 
 const addBtn = document.querySelector('.add');
 const addForm = document.querySelector('.add-form');
@@ -26,12 +26,17 @@ addFormInput.addEventListener('keydown', (e) => {
            newTaskCreation(); 
     }
 })
-addFormInput.addEventListener('blur', (e) => {console.log(this)})
 //-----------------------------------------------------------------
+
+
 
 let mylist = []; 
 let select = 'all';
-const mylistStorage = []; //my storage for tasks
+let mylistStorage = JSON.parse(localStorage.getItem('myObj')) || []; //my storage for tasks
+render()
+
+
+
 
 const cases = ['1', '2', '3', '4']
 let num;
@@ -133,6 +138,12 @@ function render() {
             }
         })
     }
+
+
+    let myObj = JSON.stringify(mylistStorage);
+    localStorage.setItem('myObj', myObj)
+
+  
 }
 
 
@@ -239,4 +250,6 @@ function newTaskCreation() {
          render();
     }
 }
+
+
 
