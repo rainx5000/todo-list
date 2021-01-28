@@ -1,4 +1,4 @@
-// document.body.addEventListener('click', (e) => console.dir(e.target))
+document.body.addEventListener('click', (e) => console.log(e.target))
 
 const addBtn = document.querySelector('.add');
 const addForm = document.querySelector('.add-form');
@@ -14,7 +14,7 @@ addBtn.addEventListener('click', (e) => {
 })
 addForm.addEventListener('mousedown', (e) => {
     if (e.target.classList.contains('add-form')) {
-        addForm.classList.toggle('display-off')
+        addForm.firstElementChild.value.length > 0 ? newTaskCreation() : addForm.classList.toggle('display-off')
     }
 })
 //-------------------------------------------------------------------
@@ -66,7 +66,14 @@ function render() {
     }
     const tasks = document.querySelectorAll('.task')
         tasks.forEach((task, index) => {
-            task.dataset.task = index.toString();
+            task.dataset.task = index.toString(); //creates a data-task index that correlates with mylistStorage
+
+            task.firstChild.addEventListener('input', (e) => { //updates task name when editing name
+                mylist[index].name = task.firstChild.value;
+            })
+            // task.lastChild.forEach(el => {
+            //     if
+            // })
     });
 
     const allCompleteBtns = document.querySelectorAll('.complete-button') //each task complete btn will remove selected dom element object in mylist, then renders it again
@@ -79,12 +86,22 @@ function render() {
         })
     })
 
+    const allConfigs = document.querySelectorAll('.config');
     const editBtns = document.querySelectorAll('.edit-button')
-        editBtns.forEach(btn => {
+        editBtns.forEach((btn) => {
         btn.addEventListener('click', (e) => {
-            expandedTask(e.target.nextSibling);
+            allConfigs.forEach((config) => {
+                if (e.target.nextSibling == config) {
+                    e.target.nextSibling.classList.toggle('display-off')
+                }
+                else {
+                    config.classList.add('display-off')
+                }
+            })
         })
     }) 
+
+
     const notes = document.querySelectorAll('.notes')
     notes.forEach((txt, index) => {
         updateTask(txt, index, 'description');
@@ -96,6 +113,8 @@ function render() {
     const priority = document.querySelectorAll('.priority')
     priority.forEach((lvl, index) => {
         updateTask(lvl, index, 'priority')
+    }) 
+    priority.forEach(lvl => {
         for (let option of lvl.children) {
             if (option.value === lvl.value) {
                 option.setAttribute('selected', 'selected')
@@ -103,8 +122,8 @@ function render() {
                 option.removeAttribute('selected');
             }
         }
-    }) 
-    function updateTask(el, index, prop) {
+    })
+    function updateTask(el, index, prop) { //update tasks config values
         el.addEventListener('input', (e) => {
                 if (index == (tasks[index].dataset.task)) {
                     mylist[index][prop] = e.target.value;  
@@ -113,36 +132,6 @@ function render() {
     }
 }
 
-function expandedTask(taskName) {
-    taskName.classList.toggle('display-off')
-}
-
-
-function newTaskCreation() {
-    for (let task of mylist) {
-        if (task.name === addFormInput.value) {
-         addFormInput.value = '';
-         addForm.classList.toggle('display-off');
-         return;
-        }
-     }
-     const task = listFactory(addFormInput.value);
-     mylistStorage.push(task);
-     addFormInput.value = ''; //resets the new task input value
-     
-     addForm.classList.toggle('display-off');
-     render()
-}
-
-
-
-const listFactory = (name) => { //new task object creator
-    name = name;
-    description = '';
-    dueDate =  '';
-    priority =  1;
-    return {name, description, dueDate, priority}
-}
 
 
 function newTask(name, desc, date, priority) {
@@ -205,5 +194,42 @@ function newTask(name, desc, date, priority) {
     configPriority.classList.add('priority')
     configPriority.append(priorityLow, priorityMedium, priorityHigh, priorityUrgent)
 
+}
+
+
+
+const listFactory = (name) => { //new task object creator
+    name = name;
+    description = '';
+    dueDate =  '';
+    priority =  1;
+    return {name, description, dueDate, priority}
+}
+
+
+
+function resetInput() {
+    addFormInput.value = '';
+    addForm.classList.toggle('display-off');
+}
+
+
+
+function newTaskCreation() {
+    if (addFormInput.value == 0) {
+        resetInput();
+    } else {
+        for (let task of mylist) {
+            console.log(addFormInput.value == 0)
+            if ((task.name === addFormInput.value) || (addFormInput.value == 0)) {
+                resetInput();
+             return;
+            }
+         }
+         const task = listFactory(addFormInput.value);
+         mylistStorage.push(task);
+         resetInput();
+         render();
+    }
 }
 
