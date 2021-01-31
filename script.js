@@ -28,15 +28,10 @@ addFormInput.addEventListener('keydown', (e) => {
     }
 })
 //-----------------------------------------------------------------
-
-
-
 let mylist = []; 
 let select = 'all';
 let mylistStorage = JSON.parse(localStorage.getItem('myObj')) || []; //my storage for tasks
 render()
-
-
 
 
 const cases = ['1', '2', '3', '4']
@@ -49,8 +44,6 @@ controlsDisplay.addEventListener('click', (e) => {
             mylistStorage.filter(task => {if(task.priority == num) mylist.push(task)})
             select = num;  
             render();
-
-
             break;
         case 'all':
             select = 'all'
@@ -60,14 +53,28 @@ controlsDisplay.addEventListener('click', (e) => {
 })
 
 //-----------------------------------------------------------------
-
-
 function render() {
     while (listContainer.firstChild) {//refreshes the tasks with the updateTaskd storage array
         listContainer.removeChild(listContainer.firstChild)
     }
     
     if (select === 'all') mylist = mylistStorage;
+    if (mylist.length === 0) {
+        const emptyList = document.createElement('div');
+        // const banImg = document.createElement('img');
+        // banImg.setAttribute('src', 'ban.svg')
+        // banImg.setAttribute('alt', 'There is no task here');
+        const emptyListP = document.createElement('p');
+        emptyListP.innerText = 'There is nothing here...';
+
+        const banImg = document.createElement('div')
+        banImg.innerHTML = '<i class="fas fa-ban empty-list-ban-sign"></i>'
+
+        listContainer.append(emptyList);
+        emptyList.append(banImg, emptyListP);
+        emptyList.classList.add('empty-list');
+        return;
+    }
 
     for (let task of mylist) {//puts the tasks back inlcluding the new one added
         newTask(task.name, task.description, task.dueDate, task.priority)
@@ -87,8 +94,13 @@ function render() {
     const allCompleteBtns = document.querySelectorAll('.complete-button') //each task complete btn will remove selected dom element object in mylist, then renders it again
     allCompleteBtns.forEach((btn, index) => {
         btn.addEventListener('click', (e) => {
-                if (index == (tasks[index].dataset.task)) {
+                if (index == (tasks[index].dataset.task)) { 
                     mylist.splice(index, 1)
+                    if (select !== 'all') {
+                        const indexOfLocalStorage = mylistStorage.indexOf(mylist[index])
+                        mylistStorage.splice(indexOfLocalStorage, 1);
+                    }
+                    localStorageUpdate();
                     render();
                 }
         })
@@ -109,8 +121,6 @@ function render() {
             })
         })
     }) 
-
-
     const notes = document.querySelectorAll('.notes')
     notes.forEach((txt, index) => {
         updateTask(txt, index, 'description');
@@ -140,14 +150,10 @@ function render() {
         })
     }
 
-
-    let myObj = JSON.stringify(mylistStorage);
-    localStorage.setItem('myObj', myObj)
+    localStorageUpdate()
 
   
 }
-
-
 
 function newTask(name, desc, date, priority) {
     const taskContainer = document.createElement('div');
@@ -192,6 +198,8 @@ function newTask(name, desc, date, priority) {
     for (let lvl of priorityList) {
         if(priority == lvl.value) lvl.setAttribute('selected', 'selected')  
     }
+
+    
         
     listContainer.append(taskContainer)
     taskContainer.append(containerNameBtns, config)
@@ -216,8 +224,6 @@ function newTask(name, desc, date, priority) {
 
 }
 
-
-
 const listFactory = (name) => { //new task object creator
     name = name;
     description = '';
@@ -226,14 +232,10 @@ const listFactory = (name) => { //new task object creator
     return {name, description, dueDate, priority}
 }
 
-
-
 function resetInput() {
     addFormInput.value = '';
     addForm.classList.toggle('display-off');
 }
-
-
 
 function newTaskCreation() {
     if (addFormInput.value == 0) {
@@ -251,6 +253,11 @@ function newTaskCreation() {
          resetInput();
          render();
     }
+}
+
+function localStorageUpdate() {
+    let myObj = JSON.stringify(mylistStorage);
+    localStorage.setItem('myObj', myObj)
 }
 
 
