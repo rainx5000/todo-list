@@ -108,6 +108,7 @@ function render() {
 
             task.firstChild.firstChild.addEventListener('input', (e) => { //updates task name when editing name
                 mylist[index].name = task.firstChild.firstChild.value;
+                localStorageUpdate()
             })
             // task.lastChild.forEach(el => {
             //     if
@@ -169,7 +170,7 @@ function render() {
         el.addEventListener('input', (e) => {
                 if (index == (tasks[index].dataset.task)) {
                     mylist[index][prop] = e.target.value; 
-                    render()
+                    localStorageUpdate();      
             }
         })
     }
@@ -245,7 +246,7 @@ function newTask(name, desc, date, priority) {
     priorityLabel.append(configPriority);
     configPriority.classList.add('priority')
     configPriority.append(priorityLow, priorityMedium, priorityHigh, priorityUrgent)
-
+    
 }
 
 const listFactory = (name) => { //new task object creator
@@ -275,6 +276,7 @@ function newTaskCreation() {
          mylistStorage.push(task);
          select = 'all'
          resetInput();
+         
          render();
     }
 }
