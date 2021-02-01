@@ -5,6 +5,8 @@ const addForm = document.querySelector('.add-form');
 const addFormInput = document.querySelector('.add-form-input')
 const listContainer = document.querySelector('.list')
 const controlsDisplay = document.querySelector('.controls-display')
+controlsDisplay.firstElementChild.classList.add('selectedBtn')
+
 
 
 //OPEN AND CLOSE FORM
@@ -38,6 +40,7 @@ const cases = ['1', '2', '3', '4']
 let num;
 controlsDisplay.addEventListener('click', (e) => {
     num = e.target.value
+    updateBtns(e.target);
     switch (num) {
         case num:
             mylist = [];
@@ -52,13 +55,33 @@ controlsDisplay.addEventListener('click', (e) => {
     }
 })
 
+function updateBtns(selectedBtn) {
+    // if (select !== 'all') {
+    //     selectedBtn = selectedBtn
+    // }
+        const arrayBtns = Array.from(controlsDisplay.children);
+        arrayBtns.forEach(btn => {
+            if (selectedBtn == btn) {
+                btn.classList.add('selectedBtn')
+            } else {
+                btn.classList.remove('selectedBtn')
+            }
+        })
+    
+    
+}
+
 //-----------------------------------------------------------------
 function render() {
     while (listContainer.firstChild) {//refreshes the tasks with the updateTaskd storage array
         listContainer.removeChild(listContainer.firstChild)
     }
     
-    if (select === 'all') mylist = mylistStorage;
+    if (select === 'all') {
+        mylist = mylistStorage;
+        updateBtns(controlsDisplay.firstElementChild);
+    }
+         
     if (mylist.length === 0) {
         const emptyList = document.createElement('div');
         // const banImg = document.createElement('img');
@@ -145,7 +168,8 @@ function render() {
     function updateTask(el, index, prop) { //update tasks config values
         el.addEventListener('input', (e) => {
                 if (index == (tasks[index].dataset.task)) {
-                    mylist[index][prop] = e.target.value;  
+                    mylist[index][prop] = e.target.value; 
+                    render()
             }
         })
     }
@@ -205,7 +229,7 @@ function newTask(name, desc, date, priority) {
     taskContainer.append(containerNameBtns, config)
     containerNameBtns.append(taskName, completeBtn, editBtn)
     containerNameBtns.classList.add('container-name-and-btns')
-    taskContainer.classList.add('task')
+    taskContainer.classList.add('task', `color-${priority}`)
     taskName.classList.add('task-name')
     completeBtn.classList.add('complete-button')
     editBtn.classList.add('edit-button')

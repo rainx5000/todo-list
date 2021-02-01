@@ -179,13 +179,17 @@ h1 {
   border: none;
 }
 
-.display-buttons-active {
-background-color: green;
+.display-buttons:hover {
+  background-color: rgb(96, 128, 61);
+  color: white;
+}
+.selectedBtn {
+  background-color: rgb(96, 128, 61);
+  color: white;
 }
 /* controls */
 
 .task {
-  background-color: var(--bg-color);
   display: flex;
   flex-wrap: wrap;
   flex-basis: 1;
@@ -242,10 +246,8 @@ background-color: green;
   display: flex;
   justify-content: space-between;
   width: 100%;
-
   min-width: 0;
   height: fit-content;
-  background-color: var(--bg-color);
   margin: 2vh 2vw 1vh 1vw;
 }
 
@@ -293,6 +295,21 @@ background-color: green;
   font-size: 2rem;
   width: 70%;
   text-align: center;
+}
+
+.color-1 {
+  background-color: var(--bg-color);
+}
+
+.color-2 {
+  background-color: rgb(204, 216, 96);
+}
+
+.color-3 {
+  background-color: rgb(226, 153, 104);
+}
+.color-4 {
+  background-color: rgba(238, 101, 101, 0.952);
 }
 
 
