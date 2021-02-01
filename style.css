@@ -347,6 +347,10 @@ h1 {
   .container {
     width: 100%;
   }
+  .add-form input {
+    width: 90%;
+    font-size: 3vh;
+  }
 }
 
 @media (max-width: 450px) {
