@@ -81,13 +81,17 @@ select {
 
 html {
     /* background-color: rgb(201, 233, 180); */
-    background-color: var(--bg-color);
+    background: linear-gradient(0.25turn, rgb(164, 214, 106), #ebf8e1, rgb(164, 214, 106));
     font-family: 'Poppins', sans-serif;
 }
 
 .container {
     /* background-color: rgb(164, 214, 106); */
     background-color: rgb(201, 233, 180);
+    /* border-left: 1px solid  rgb(164, 214, 106);
+    border-right: 1px solid  rgb(164, 214, 106); */
+    box-shadow: 0px 0px 10px 0px rgb(64, 90, 60);
+
     width: 50vw;
     min-height: 100vh;
     padding-bottom: 2vh;
@@ -99,7 +103,7 @@ html {
     display: flex;
     justify-content: space-between;
     padding: 3vh 2vw 3vh 5vw;
-    border-bottom: 1.5vh solid var(--bg-color);
+    /* border-bottom: 1.5vh solid var(--bg-color); */
 }
 
 .add {
@@ -161,7 +165,6 @@ h1 {
 .controls-display {
   width: 100%;
   display: flex;
-  border-bottom: 2px solid rgb(164 214 106);
 }
 .display-buttons {
   background-color: inherit;
@@ -173,10 +176,12 @@ h1 {
   border: none;
   outline: none;
   cursor: pointer;
-  border-right: 1px solid rgb(164 214 106);
+  border-right: 1px solid rgb(96, 128, 61);
+  border-top: 2px solid rgb(96, 128, 61);
+  border-bottom: 2px solid rgb(96, 128, 61);
 }
 .controls-display button:last-child {
-  border: none;
+  border-right: none;
 }
 
 .display-buttons:hover {
@@ -207,7 +212,7 @@ h1 {
 
 .task-name {
   min-width: 0;
-  margin: 0 2vh 0 1vh;
+  margin: 0 auto 0 1vh;
   flex: 1 1 auto;
   width: 80%;
   max-width: 80%;
